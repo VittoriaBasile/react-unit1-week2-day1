@@ -23,7 +23,7 @@ class BookList extends Component {
             />
           </Form.Group>
         </Form>
-        <Row xs="2" md="3" lg="4" xl="5">
+        <Row xs="2" md="2" lg="3" xl="4">
           {!this.state.stringa ? (
             <>
               {this.props.books.map((book) => (
