@@ -6,25 +6,17 @@ class AddComment extends Component {
     comment: {
       comment: "",
       rate: "1",
-      elementId: "",
+      elementId: this.props.asin,
     },
-  };
-
-  handleChange = (propertyName, propertyValue) => {
-    this.setState({
-      reservation: {
-        ...this.state.reservation,
-        [propertyName]: propertyValue,
-      },
-    });
   };
 
   handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await fetch("https://striveschool-api.herokuapp.com/api/comments/", {
         method: "POST",
-        body: JSON.stringify({ comment: "", rate: "1", elementId: "" }),
+        body: JSON.stringify(this.state.comment),
 
         headers: {
           Authorization:
@@ -33,21 +25,18 @@ class AddComment extends Component {
         },
       });
       if (response.ok) {
+        this.props.request();
         this.setState({
           comment: {
             comment: "",
             rate: "1",
-            elementId: "",
+            elementId: this.props.asin,
           },
         });
       }
     } catch (error) {
       console.error(error);
     }
-  };
-
-  componentDidMount = () => {
-    this.handleSubmit();
   };
 
   render() {
@@ -65,16 +54,14 @@ class AddComment extends Component {
                     rows={3}
                     placeholder="Scrivi il tuo commento"
                     value={this.state.comment.comment}
-                    onChange={(e) => this.handleChange("comment", e.target.value)}
-                    required
+                    onChange={(e) => this.setState({ comment: { ...this.state.comment, comment: e.target.value } })}
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="">
                   <Form.Label>vota il libro</Form.Label>
                   <Form.Select
                     value={this.state.comment.rate}
-                    onChange={(e) => this.handleChange("rate", e.target.value)}
-                    required
+                    onChange={(e) => this.setState({ comment: { ...this.state.comment, rate: e.target.value } })}
                   >
                     <option>1</option>
                     <option>2</option>
@@ -83,16 +70,7 @@ class AddComment extends Component {
                     <option>5</option>
                   </Form.Select>
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="elementId">
-                  <Form.Label>element Id:</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Scrivi l'element Id"
-                    value={this.state.comment.elementId}
-                    onChange={(e) => this.handleChange("elementId", e.target.value)}
-                    required
-                  />
-                </Form.Group>
+
                 <Button type="submit">INVIA</Button>
               </Form>
             </Col>

@@ -31,7 +31,7 @@ class CommentArea extends Component {
   render() {
     return (
       <>
-        <AddComment />
+        <AddComment request={this.request} asin={this.props.asin} />
         <CommentsList comments={this.state.comments} />;
       </>
     );
